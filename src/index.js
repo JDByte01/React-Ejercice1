@@ -40,24 +40,23 @@ class Board extends React.Component {
     }
   
     render() {
-
         return (
             <div>
-            <div className="board-row">
-                {this.renderSquare(0)}
-                {this.renderSquare(1)}
-                {this.renderSquare(2)}
-            </div>
-            <div className="board-row">
-                {this.renderSquare(3)}
-                {this.renderSquare(4)}
-                {this.renderSquare(5)}
-            </div>
-            <div className="board-row">
-                {this.renderSquare(6)}
-                {this.renderSquare(7)}
-                {this.renderSquare(8)}
-            </div>
+                <div className="board-row">
+                    {this.renderSquare(0)}
+                    {this.renderSquare(1)}
+                    {this.renderSquare(2)}
+                </div>
+                <div className="board-row">
+                    {this.renderSquare(3)}
+                    {this.renderSquare(4)}
+                    {this.renderSquare(5)}
+                </div>
+                <div className="board-row">
+                    {this.renderSquare(6)}
+                    {this.renderSquare(7)}
+                    {this.renderSquare(8)}
+                </div>
             </div>
         );
     }
@@ -69,6 +68,7 @@ class Game extends React.Component {
         this.state = {
             history: [{
                 squares: Array(9).fill(null),
+                index: 0,
             }],
             stepNumber: 0,
             xIsNext: true,
@@ -85,6 +85,7 @@ class Game extends React.Component {
         this.setState({
             history: history.concat( [{
                 squares: squares,
+                index: i,
             }] ),
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext,
@@ -104,8 +105,9 @@ class Game extends React.Component {
         const winner = calculateWinner(current.squares);
 
         const moves = history.map((step, move) => {
+            const pos = getRowCol(step.index)
             const desc = move ?
-                'Go to move #' + move :
+                'Go to move #' + move + " ("+ pos.col + "," + pos.row +")":
                 'Go to game start';
             return (
                 <li key = {move}>
@@ -155,6 +157,14 @@ function calculateWinner(squares){
     }
 
     return null;
+}
+
+function getRowCol(pos){
+    let row = parseInt(pos / 3)
+    let col = parseInt(pos - (row * 3)) 
+    
+    return {col: col, row: row}
+
 }
   
   // ========================================
